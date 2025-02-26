@@ -26,3 +26,15 @@ dependencies {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+
+tasks.register("dockerComposeUp", Exec::class) {
+    group = "docker"
+    description = "Start the application using Docker Compose"
+    commandLine("docker", "compose", "up", "--build", "-d")
+}
+
+tasks.register("dockerComposeDown", Exec::class) {
+    group = "docker"
+    description = "Stop and remove Docker Compose containers"
+    commandLine("docker", "compose", "down")
+}
