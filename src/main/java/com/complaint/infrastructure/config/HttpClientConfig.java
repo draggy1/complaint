@@ -1,4 +1,4 @@
-package com.complaint.infrastructure.common.config;
+package com.complaint.infrastructure.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

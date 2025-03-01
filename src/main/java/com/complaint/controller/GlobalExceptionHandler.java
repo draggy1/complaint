@@ -1,7 +1,7 @@
-package com.complaint.infrastructure.controller;
+package com.complaint.controller;
 
-import com.complaint.infrastructure.common.exception.CountryNotFoundException;
-import com.complaint.infrastructure.common.exception.IpLocationClientException;
+import com.complaint.infrastructure.client.exception.CountryNotFoundException;
+import com.complaint.infrastructure.client.exception.IpLocationClientException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;

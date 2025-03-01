@@ -1,9 +1,9 @@
 package com.complaint.service;
 
-import com.complaint.infrastructure.IpLocationClient;
-import com.complaint.infrastructure.common.exception.CountryNotFoundException;
-import com.complaint.infrastructure.common.exception.IpLocationClientException;
-import com.complaint.infrastructure.dto.CountryDto;
+import com.complaint.infrastructure.client.IpLocationClient;
+import com.complaint.infrastructure.client.exception.CountryNotFoundException;
+import com.complaint.infrastructure.client.exception.IpLocationClientException;
+import com.complaint.infrastructure.client.dto.CountryDto;
 import com.complaint.service.model.Country;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,7 +38,8 @@ class IpLocationServiceTest {
         Country actual = ipLocationService.getSubmittersCountry();
 
         //then
-        assertThat(actual).isEqualTo(new Country("Poland"));
+        assertThat(actual)
+                .isEqualTo(new Country("Poland"));
     }
 
     @Test
@@ -101,7 +102,8 @@ class IpLocationServiceTest {
                 .hasMessage("IP location client failed")
                 .hasCause(givenException);
 
-        assertThat(thrown.getHttpStatus()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+        assertThat(thrown.getHttpStatus())
+                .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Test
@@ -121,6 +123,7 @@ class IpLocationServiceTest {
                 .hasMessage("Thread was interrupted while fetching IP location")
                 .hasCause(givenException);
 
-        assertThat(thrown.getHttpStatus()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+        assertThat(thrown.getHttpStatus())
+                .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

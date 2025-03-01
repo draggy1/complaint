@@ -1,4 +1,4 @@
-package com.complaint.infrastructure.common.exception;
+package com.complaint.infrastructure.client.exception;
 
 import org.springframework.http.HttpStatus;
 

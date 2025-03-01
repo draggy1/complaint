@@ -1,6 +1,6 @@
-package com.complaint.infrastructure;
+package com.complaint.infrastructure.client;
 
-import com.complaint.infrastructure.dto.CountryDto;
+import com.complaint.infrastructure.client.dto.CountryDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;

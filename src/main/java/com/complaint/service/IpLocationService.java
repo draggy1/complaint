@@ -1,8 +1,8 @@
 package com.complaint.service;
 
-import com.complaint.infrastructure.IpLocationClient;
-import com.complaint.infrastructure.common.exception.CountryNotFoundException;
-import com.complaint.infrastructure.common.exception.IpLocationClientException;
+import com.complaint.infrastructure.client.IpLocationClient;
+import com.complaint.infrastructure.client.exception.CountryNotFoundException;
+import com.complaint.infrastructure.client.exception.IpLocationClientException;
 import com.complaint.service.model.Country;
 import org.springframework.stereotype.Service;
 
