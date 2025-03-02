@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: complaint-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/complaintsdb
+    username: myuser
+    password: mypassword
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+ip:
+  client:
+    url: "http://ip-api.com/json/"

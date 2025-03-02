@@ -4,7 +4,6 @@ import com.complaint.infrastructure.client.IpLocationClient;
 import com.complaint.infrastructure.client.exception.CountryNotFoundException;
 import com.complaint.infrastructure.client.exception.IpLocationClientException;
 import com.complaint.infrastructure.client.dto.CountryDto;
-import com.complaint.service.model.Country;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -35,11 +34,11 @@ class IpLocationServiceTest {
         when(client.getCountryFromIpApi()).thenReturn(Optional.of(new CountryDto("Poland")));
 
         //when
-        Country actual = ipLocationService.getSubmittersCountry();
+        String actual = ipLocationService.getSubmittersCountry();
 
         //then
         assertThat(actual)
-                .isEqualTo(new Country("Poland"));
+                .isEqualTo("Poland");
     }
 
     @Test

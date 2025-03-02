@@ -1,9 +1,9 @@
 package com.complaint.service;
 
 import com.complaint.infrastructure.client.IpLocationClient;
+import com.complaint.infrastructure.client.dto.CountryDto;
 import com.complaint.infrastructure.client.exception.CountryNotFoundException;
 import com.complaint.infrastructure.client.exception.IpLocationClientException;
-import com.complaint.service.model.Country;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -17,10 +17,10 @@ public class IpLocationService {
         this.client = client;
     }
 
-    public Country getSubmittersCountry() {
+    public String getSubmittersCountry() {
         try {
             return client.getCountryFromIpApi()
-                    .map(dto -> new Country(dto.country()))
+                    .map(CountryDto::country)
                     .orElseThrow(() -> new CountryNotFoundException("Country not found"));
         } catch (URISyntaxException | IOException e) {
             throw new IpLocationClientException("IP location client failed", e);
