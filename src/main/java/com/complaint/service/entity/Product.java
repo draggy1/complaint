@@ -9,7 +9,6 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class Product {
 
     @Id
@@ -18,4 +17,8 @@ public class Product {
 
     @Column(nullable = false)
     private String name;
+
+    @Version
+    @Column(nullable = false)
+    private int version;
 }

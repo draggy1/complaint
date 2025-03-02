@@ -34,7 +34,7 @@ class IpLocationServiceTest {
         when(client.getCountryFromIpApi()).thenReturn(Optional.of(new CountryDto("Poland")));
 
         //when
-        String actual = ipLocationService.getSubmittersCountry();
+        String actual = ipLocationService.getCountryByIp();
 
         //then
         assertThat(actual)
@@ -49,10 +49,10 @@ class IpLocationServiceTest {
 
         //when
         CountryNotFoundException thrown =
-                (CountryNotFoundException) catchThrowable(ipLocationService::getSubmittersCountry);
+                (CountryNotFoundException) catchThrowable(ipLocationService::getCountryByIp);
 
         // then
-        assertThatThrownBy(ipLocationService::getSubmittersCountry)
+        assertThatThrownBy(ipLocationService::getCountryByIp)
                 .isInstanceOf(CountryNotFoundException.class)
                 .hasMessage("Country not found");
 
@@ -72,7 +72,7 @@ class IpLocationServiceTest {
 
         //when
         IpLocationClientException thrown =
-                (IpLocationClientException) catchThrowable(ipLocationService::getSubmittersCountry);
+                (IpLocationClientException) catchThrowable(ipLocationService::getCountryByIp);
 
         //then
         assertThat(thrown)
@@ -93,7 +93,7 @@ class IpLocationServiceTest {
 
         //when
         IpLocationClientException thrown =
-                (IpLocationClientException) catchThrowable(ipLocationService::getSubmittersCountry);
+                (IpLocationClientException) catchThrowable(ipLocationService::getCountryByIp);
 
         //then
         assertThat(thrown)
@@ -114,7 +114,7 @@ class IpLocationServiceTest {
 
         //when
         IpLocationClientException thrown =
-                (IpLocationClientException) catchThrowable(ipLocationService::getSubmittersCountry);
+                (IpLocationClientException) catchThrowable(ipLocationService::getCountryByIp);
 
         //then
         assertThat(thrown)

@@ -1,14 +1,18 @@
 CREATE TABLE IF NOT EXISTS products
 (
-    id   SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
+    id      SERIAL PRIMARY KEY,
+    name    VARCHAR(255)  NOT NULL,
+    version INT DEFAULT 0 NOT NULL
+
 );
 
 CREATE TABLE IF NOT EXISTS complainers
 (
     id                 SERIAL PRIMARY KEY,
-    complainer_name    VARCHAR(255) NOT NULL,
-    complainer_surname VARCHAR(255) NOT NULL
+    complainer_name    VARCHAR(255)  NOT NULL,
+    complainer_surname VARCHAR(255)  NOT NULL,
+    version            INT DEFAULT 0 NOT NULL
+
 );
 
 CREATE TABLE IF NOT EXISTS complaints
@@ -23,7 +27,8 @@ CREATE TABLE IF NOT EXISTS complaints
     version           INT       DEFAULT 0     NOT NULL,
     CONSTRAINT chk_submission_count CHECK (complaint_count > 0),
     CONSTRAINT fk_product FOREIGN KEY (product_id) REFERENCES products (id) ON DELETE CASCADE,
-    CONSTRAINT fk_complainer FOREIGN KEY (complainer_id) REFERENCES complainers (id) ON DELETE CASCADE
+    CONSTRAINT fk_complainer FOREIGN KEY (complainer_id) REFERENCES complainers (id) ON DELETE CASCADE,
+    CONSTRAINT unique_complaint UNIQUE (product_id, complainer_id)
 );
 
 INSERT INTO products (name)

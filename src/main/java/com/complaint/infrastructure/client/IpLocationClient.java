@@ -24,7 +24,7 @@ public class IpLocationClient {
     private final ObjectMapper objectMapper;
 
     public IpLocationClient(HttpClient httpClient,
-                            @Value("ip.client.url")
+                            @Value("${ip.client.url}")
                             String ipClientUrl,
                             ObjectMapper objectMapper) {
         this.httpClient = httpClient;

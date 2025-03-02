@@ -17,7 +17,7 @@ public class IpLocationService {
         this.client = client;
     }
 
-    public String getSubmittersCountry() {
+    public String getCountryByIp() {
         try {
             return client.getCountryFromIpApi()
                     .map(CountryDto::country)

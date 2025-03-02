@@ -69,6 +69,7 @@ public abstract class IT {
         registry.add("spring.datasource.password", POSTGRES::getPassword);
         registry.add("spring.datasource.driver-class-name", POSTGRES::getDriverClassName);
         registry.add("base.url", () -> baseUrl);
+        registry.add("ip.client.url", IT::getBaseUrl);
     }
 
     @BeforeEach

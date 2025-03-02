@@ -9,7 +9,6 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class Complainer {
 
     @Id
@@ -21,5 +20,9 @@ public class Complainer {
 
     @Column(name = "complainer_surname", nullable = false)
     private String surname;
+
+    @Version
+    @Column(nullable = false)
+    private int version;
 
 }

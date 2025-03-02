@@ -3,7 +3,9 @@ package com.complaint.controller;
 import com.complaint.common.ErrorResult;
 import com.complaint.infrastructure.client.exception.CountryNotFoundException;
 import com.complaint.infrastructure.client.exception.IpLocationClientException;
+import com.complaint.service.exception.ComplainerNotFoundException;
 import com.complaint.service.exception.ComplaintNotFoundException;
+import com.complaint.service.exception.ProductNotFoundException;
 import jakarta.persistence.OptimisticLockException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
@@ -26,6 +28,21 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResult(HttpStatus.NOT_FOUND.value(), e.getMessage()));
     }
+
+    @ExceptionHandler(ComplainerNotFoundException.class)
+    public ResponseEntity<ErrorResult> handleComplainerNotFound(ComplainerNotFoundException e) {
+        log.warn("Complainer not found: {}", e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResult(HttpStatus.NOT_FOUND.value(), e.getMessage()));
+    }
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<ErrorResult> handleProductNotFound(ProductNotFoundException e) {
+        log.warn("Product not found: {}", e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResult(HttpStatus.NOT_FOUND.value(), e.getMessage()));
+    }
+
 
     @ExceptionHandler(CountryNotFoundException.class)
     public ResponseEntity<ErrorResult> handleCountryNotFoundException(CountryNotFoundException e) {
@@ -58,13 +75,6 @@ public class GlobalExceptionHandler {
                 );
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResult> handleGenericException(Exception e) {
-        log.error("Unexpected error occurred", e);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ErrorResult(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Unexpected error occurred"));
-    }
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResult> handleValidationException(MethodArgumentNotValidException e) {
         String errorMessage = e.getBindingResult()
@@ -75,5 +85,12 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.badRequest()
                 .body(new ErrorResult(HttpStatus.BAD_REQUEST.value(), errorMessage));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResult> handleGenericException(Exception e) {
+        log.error("Unexpected error occurred", e);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ErrorResult(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Unexpected error occurred"));
     }
 }

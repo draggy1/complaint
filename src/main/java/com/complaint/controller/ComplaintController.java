@@ -1,10 +1,12 @@
 package com.complaint.controller;
 
+import com.complaint.controller.dto.CreateComplaintRequest;
 import com.complaint.controller.dto.UpdateComplaintContentRequest;
 import com.complaint.service.ComplaintService;
 import com.complaint.service.dto.ComplaintDto;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,11 +32,17 @@ public class ComplaintController {
     }
 
     @PatchMapping(value = "/{complaintId}/content", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ComplaintDto> updateComplaintContent(
+    ResponseEntity<ComplaintDto> updateComplaintContent(
             @PathVariable int complaintId,
             @RequestBody @Valid UpdateComplaintContentRequest request) {
 
         ComplaintDto updatedComplaint = complaintService.updateComplaintContent(complaintId, request.content());
         return ResponseEntity.ok(updatedComplaint);
+    }
+
+    @PostMapping
+    ResponseEntity<ComplaintDto> addComplaint(@RequestBody @Valid CreateComplaintRequest request) {
+        ComplaintDto newComplaint = complaintService.addComplaint(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(newComplaint);
     }
 }

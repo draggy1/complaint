@@ -11,7 +11,7 @@ class ProductMapperTest {
     @Test
     void shouldMapProductToProductDto() {
         // given
-        Product product = new Product(1, "Laptop Pro X");
+        Product product = new Product(1, "Laptop Pro X", 0);
 
         // when
         ProductDto productDto = ProductMapper.INSTANCE.productToProductDto(product);

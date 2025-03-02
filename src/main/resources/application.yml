@@ -19,4 +19,4 @@ spring:
 
 ip:
   client:
-    url: http://test.com/json/
+    url: http://ip-api.com/json/

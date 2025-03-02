@@ -11,7 +11,7 @@ class ComplainerMapperTest {
     @Test
     void shouldMapComplainerToComplainerDto() {
         // given
-        Complainer complainer = new Complainer(1, "John", "Doe");
+        Complainer complainer = new Complainer(1, "John", "Doe", 0);
 
         // when
         ComplainerDto complainerDto = ComplainerMapper.INSTANCE.complainerToComplainerDto(complainer);

@@ -17,4 +17,7 @@ public interface ComplaintRepository extends JpaRepository<Complaint, Integer> {
 
     @Query("SELECT c FROM Complaint c JOIN FETCH c.product JOIN FETCH c.complainer WHERE c.id = :id")
     Optional<Complaint> getComplaintById(@Param("id") int id);
+
+    @Query("SELECT c FROM Complaint c WHERE c.product.id = :productId AND c.complainer.id = :complainerId")
+    Optional<Complaint> findByProductAndComplainer(@Param("productId") int productId, @Param("complainerId") int complainerId);
 }

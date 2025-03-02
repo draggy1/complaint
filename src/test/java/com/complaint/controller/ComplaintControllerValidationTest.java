@@ -8,7 +8,7 @@ import org.springframework.http.MediaType;
 
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -20,12 +20,58 @@ class ComplaintControllerValidationTest {
     private MockMvc mockMvc;
 
     @Test
-    void shouldReturn400WhenContentIsMissing() throws Exception {
+    void shouldReturn400WhenProductIdIsMissing() throws Exception {
         // given
-        String invalidRequest = "{}";
+        String invalidRequest = """
+                {
+                    "complainerId": 1,
+                    "content": "Valid content",
+                    "complaintCountry": "Poland"
+                }
+                """;
 
         // when & then
-        mockMvc.perform(patch("/complaint/1/content")
+        mockMvc.perform(post("/complaint")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(invalidRequest))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.statusCode").value(400))
+                .andExpect(jsonPath("$.message").value("Product ID cannot be null"));
+    }
+
+    @Test
+    void shouldReturn400WhenComplainerIdIsMissing() throws Exception {
+        // given
+        String invalidRequest = """
+                {
+                    "productId": 1,
+                    "content": "Valid content",
+                    "complaintCountry": "Poland"
+                }
+                """;
+
+        // when & then
+        mockMvc.perform(post("/complaint")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(invalidRequest))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.statusCode").value(400))
+                .andExpect(jsonPath("$.message").value("Complainer ID cannot be null"));
+    }
+
+    @Test
+    void shouldReturn400WhenContentIsMissing() throws Exception {
+        // given
+        String invalidRequest = """
+                {
+                    "productId": 1,
+                    "complainerId": 1,
+                    "complaintCountry": "Poland"
+                }
+                """;
+
+        // when & then
+        mockMvc.perform(post("/complaint")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(invalidRequest))
                 .andExpect(status().isBadRequest())
@@ -37,19 +83,39 @@ class ComplaintControllerValidationTest {
     void shouldReturn400WhenContentIsBlank() throws Exception {
         // given
         String invalidRequest = """
-                    {
-                        "content": ""
-                    }
+                {
+                    "productId": 1,
+                    "complainerId": 1,
+                    "content": "",
+                    "complaintCountry": "Poland"
+                }
                 """;
-        patch("/complaint/1/content")
-                .contentType(MediaType.APPLICATION_JSON);
 
         // when & then
-        mockMvc.perform(patch("/complaint/1/content")
+        mockMvc.perform(post("/complaint")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(invalidRequest))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.statusCode").value(400))
                 .andExpect(jsonPath("$.message").value("Content cannot be blank"));
+    }
+
+    @Test
+    void shouldReturn201WhenValidRequestIsSent() throws Exception {
+        // given
+        String validRequest = """
+                {
+                    "productId": 1,
+                    "complainerId": 1,
+                    "content": "Valid content",
+                    "complaintCountry": "Poland"
+                }
+                """;
+
+        // when & then
+        mockMvc.perform(post("/complaint")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(validRequest))
+                .andExpect(status().isCreated());
     }
 }
