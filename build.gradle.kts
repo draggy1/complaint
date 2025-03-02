@@ -39,6 +39,8 @@ dependencies {
     testImplementation("io.rest-assured:rest-assured:5.3.0")
     testImplementation("io.rest-assured:json-path:5.3.0")
     testImplementation("org.wiremock:wiremock-standalone:3.3.1")
+    testImplementation ("org.springframework:spring-test")
+    testImplementation ("com.fasterxml.jackson.core:jackson-databind")
 
     annotationProcessor("org.projectlombok:lombok:1.18.30")
     annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
