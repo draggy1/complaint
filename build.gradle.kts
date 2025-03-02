@@ -26,6 +26,7 @@ dependencies {
     implementation("org.projectlombok:lombok:1.18.30")
     implementation("org.postgresql:postgresql:42.6.0")
     implementation("org.mapstruct:mapstruct:1.5.5.Final")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
 
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")

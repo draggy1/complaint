@@ -38,11 +38,10 @@ class ComplaintServiceTest {
     private static final Complainer COMPLAINER = new Complainer(1, "Jack", "Strong");
 
     private static final Complaint COMPLAINT_1 = new Complaint(
-            1, new Product(1, "MP3"), COMPLAINER, "Some content", CREATED_AT_1, "Poland", 1
-    );
+            1, new Product(1, "MP3"), COMPLAINER, "Some content", CREATED_AT_1, "Poland", 1, 0);
 
     private static final Complaint COMPLAINT_2 = new Complaint(
-            2, new Product(2, "MP4"), COMPLAINER, "Some content2", CREATED_AT_2, "US", 2
+            2, new Product(2, "MP4"), COMPLAINER, "Some content2", CREATED_AT_2, "US", 2, 0
     );
 
     private static final ComplaintDto COMPLAINT_DTO_1 = new ComplaintDto(
@@ -82,7 +81,8 @@ class ComplaintServiceTest {
     @Test
     void shouldThrowExceptionWhenRepositoryFails() {
         // given
-        when(complaintRepository.findAll()).thenThrow(new DataAccessException("Database error") {});
+        when(complaintRepository.findAll()).thenThrow(new DataAccessException("Database error") {
+        });
 
         // when & then
         assertThatThrownBy(() -> complaintService.getAllComplaints())
@@ -125,7 +125,8 @@ class ComplaintServiceTest {
     @Test
     void shouldThrowExceptionWhenDatabaseFailsForGetComplaintById() {
         // given
-        when(complaintRepository.getComplaintById(1)).thenThrow(new DataAccessException("Database error") {});
+        when(complaintRepository.getComplaintById(1)).thenThrow(new DataAccessException("Database error") {
+        });
 
         // when & then
         assertThatThrownBy(() -> complaintService.getComplaintById(1))
@@ -143,5 +144,51 @@ class ComplaintServiceTest {
 
         // then
         verify(complaintRepository, times(1)).getComplaintById(1);
+    }
+
+    @Test
+    void shouldUpdateComplaintContentSuccessfully() {
+        // given
+        String newContent = "Updated content";
+        Complaint givenComplain = new Complaint(
+                1, new Product(1, "MP3"), COMPLAINER, "Some Content", CREATED_AT_1, "Poland", 1, 0
+        );
+        ComplaintDto expectedDto = new ComplaintDto(
+                1, new ProductDto(1, "MP3"), new ComplainerDto(1, "Jack", "Strong"),
+                newContent, CREATED_AT_1, "Poland", 1
+        );
+
+        when(complaintRepository.findById(4)).thenReturn(Optional.of(givenComplain));
+
+        // when
+        ComplaintDto actual = complaintService.updateComplaintContent(4, newContent);
+
+        // then
+        assertThat(actual).isEqualTo(expectedDto);
+    }
+
+    @Test
+    void shouldThrowComplaintNotFoundExceptionWhenUpdatingNonExistingComplaint() {
+        // given
+        String newContent = "Updated content";
+        when(complaintRepository.findById(999)).thenReturn(Optional.empty());
+
+        // when & then
+        assertThatThrownBy(() -> complaintService.updateComplaintContent(999, newContent))
+                .isInstanceOf(ComplaintNotFoundException.class)
+                .hasMessageContaining("Complaint not found");
+    }
+
+    @Test
+    void shouldThrowExceptionWhenDatabaseFailsForUpdateComplaintContent() {
+        // given
+        String newContent = "Updated content";
+        when(complaintRepository.findById(1)).thenThrow(new DataAccessException("Database error") {
+        });
+
+        // when & then
+        assertThatThrownBy(() -> complaintService.updateComplaintContent(1, newContent))
+                .isInstanceOf(DataAccessException.class)
+                .hasMessageContaining("Database error");
     }
 }

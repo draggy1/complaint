@@ -1,7 +1,6 @@
 package com.complaint.controller;
 
 import io.restassured.RestAssured;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -12,6 +11,14 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.utility.DockerImageName;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.configureFor;
 
@@ -65,7 +72,15 @@ public abstract class IT {
     }
 
     @BeforeEach
-    void beforeEach() {
+    void beforeEach() throws SQLException, IOException {
         RestAssured.port = port;
+        try (Connection connection = DriverManager.getConnection(
+                POSTGRES.getJdbcUrl(), POSTGRES.getUsername(), POSTGRES.getPassword())) {
+            Statement stmt = connection.createStatement();
+            stmt.execute("TRUNCATE TABLE complaints, complainers, products RESTART IDENTITY CASCADE");
+            String sql = Files.readString(Path.of("src/test/resources/init.sql"));
+            stmt.execute(sql);
+            stmt.close();
+        }
     }
 }

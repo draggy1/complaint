@@ -4,6 +4,7 @@ import com.complaint.common.ErrorResult;
 import com.complaint.infrastructure.client.exception.CountryNotFoundException;
 import com.complaint.infrastructure.client.exception.IpLocationClientException;
 import com.complaint.service.exception.ComplaintNotFoundException;
+import jakarta.persistence.OptimisticLockException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -41,6 +42,16 @@ public class GlobalExceptionHandler {
         log.error("Database error: {}", e.getMessage(), e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ErrorResult(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Database error occurred"));
+    }
+
+    @ExceptionHandler(OptimisticLockException.class)
+    public ResponseEntity<ErrorResult> handleOptimisticLockException(OptimisticLockException e) {
+        log.warn("Optimistic locking failure: {}", e.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(new ErrorResult(
+                        HttpStatus.CONFLICT.value(),
+                        "Conflict detected: Someone else modified this complaint. Please reload and try again.")
+                );
     }
 
     @ExceptionHandler(Exception.class)

@@ -38,4 +38,8 @@ public class Complaint {
 
     @Column(name = "complaint_count", nullable = false)
     private int complaintCount;
+
+    @Version
+    @Column(nullable = false)
+    private int version;
 }

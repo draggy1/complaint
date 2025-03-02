@@ -1,6 +1,7 @@
 package com.complaint.controller;
 
 import com.complaint.common.ErrorResult;
+import com.complaint.controller.dto.UpdateComplaintContentRequest;
 import com.complaint.service.dto.ComplainerDto;
 import com.complaint.service.dto.ComplaintDto;
 import com.complaint.service.dto.ProductDto;
@@ -100,6 +101,49 @@ class ComplaintControllerIT extends IT {
                 .contentType("application/json")
                 .when()
                 .get("/complaint/999")
+                .then()
+                .statusCode(404)
+                .extract()
+                .as(ErrorResult.class);
+
+        // then
+        assertThat(errorResult.statusCode()).isEqualTo(404);
+        assertThat(errorResult.message()).isEqualTo("Complaint not found");
+    }
+
+    @Test
+    void shouldUpdateComplaintContentSuccessfully() {
+        // given
+        String newContent = "Updated complaint content";
+
+        // when
+        ComplaintDto updatedComplaint = given()
+                .contentType("application/json")
+                .body(new UpdateComplaintContentRequest(newContent))
+                .when()
+                .patch("/complaint/1/content")
+                .then()
+                .statusCode(200)
+                .extract()
+                .as(ComplaintDto.class);
+
+        // then
+        assertThat(updatedComplaint).isNotNull();
+        assertThat(updatedComplaint.id()).isEqualTo(1);
+        assertThat(updatedComplaint.content()).isEqualTo(newContent);
+    }
+
+    @Test
+    void shouldReturn404WhenUpdatingNonExistingComplaint() {
+        // given
+        String newContent = "Some updated content";
+
+        // when
+        ErrorResult errorResult = given()
+                .contentType("application/json")
+                .body(new UpdateComplaintContentRequest(newContent))
+                .when()
+                .patch("/complaint/999/content")
                 .then()
                 .statusCode(404)
                 .extract()
