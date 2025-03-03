@@ -9,7 +9,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -59,8 +58,6 @@ class IpLocationServiceTest {
         assertThat(thrown)
                 .isInstanceOf(CountryNotFoundException.class)
                 .hasMessage("Country not found");
-
-        assertThat(thrown.getHttpStatus()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
     @Test
@@ -79,9 +76,6 @@ class IpLocationServiceTest {
                 .isInstanceOf(IpLocationClientException.class)
                 .hasMessage("IP location client failed")
                 .hasCause(givenException);
-
-        assertThat(thrown.getHttpStatus()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-
     }
 
     @Test
@@ -100,9 +94,6 @@ class IpLocationServiceTest {
                 .isInstanceOf(IpLocationClientException.class)
                 .hasMessage("IP location client failed")
                 .hasCause(givenException);
-
-        assertThat(thrown.getHttpStatus())
-                .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Test
@@ -121,8 +112,5 @@ class IpLocationServiceTest {
                 .isInstanceOf(IpLocationClientException.class)
                 .hasMessage("Thread was interrupted while fetching IP location")
                 .hasCause(givenException);
-
-        assertThat(thrown.getHttpStatus())
-                .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

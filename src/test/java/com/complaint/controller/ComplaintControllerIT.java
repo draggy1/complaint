@@ -263,12 +263,6 @@ class ComplaintControllerIT extends IT {
         assertThat(errorResult.message()).isEqualTo("Country not found");
     }
 
-    private void stubIpLocationApiInvalidJson() {
-        configureFor(wiremock.getHost(), wiremock.getMappedPort(8080));
-        stubFor(get(urlPathEqualTo("/"))
-                .willReturn(okJson("{invalid_json:")));
-    }
-
     private void stubIpLocationApiError() {
         configureFor(wiremock.getHost(), wiremock.getMappedPort(8080));
         stubFor(get(urlPathEqualTo("/"))
